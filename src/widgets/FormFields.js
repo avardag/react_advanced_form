@@ -49,6 +49,36 @@ const FormFields = (props) => {
           </div>
         )
         break;
+      case "textarea": //case input, textarea, checkbox etc...
+        formTemplate = (
+          <div>
+            {showLabel(values.label, values.labelText)}
+            <textarea 
+                {...values.config} 
+                value={values.value}
+                onChange={e => changeHandler(e, item.id)}
+            ></textarea>
+          </div>
+        )
+        break;
+      case "select": //case input, textarea, checkbox etc...
+        formTemplate = (
+          <div>
+            {showLabel(values.label, values.labelText)}
+            <select 
+                name={values.config.name}
+                value={values.value}
+                onChange={e => changeHandler(e, item.id)}
+            >
+            {values.config.options.map((item, i)=>(
+              <option value={item.val} key={i}>
+                {item.text}
+              </option>
+            ))}
+            </select>
+          </div>
+        )
+        break;
     
       default:
         formTemplate=null;

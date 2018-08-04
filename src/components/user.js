@@ -26,7 +26,34 @@ class User extends Component {
           type: "text",
           placeholder: "Enter you last name..."
         }
-      }
+      },
+      message: {
+        element: "textarea",
+        value: "",
+        label: true,
+        labelText: "Message",
+        config: {
+          name: "lastname_input",
+          placeholder: "Enter you message name...",
+          rows: 6,
+          cols: 36
+        }
+      },
+      age: {
+        element: "select",
+        value: "",
+        label: true,
+        labelText: "Age",
+        config: {
+          name: "lastname_input",
+          options: [
+            {val: '1', text: '10-18'},
+            {val: '2', text: '18-28'},
+            {val: '3', text: '28-48'},
+            {val: '4', text: '48-68'},
+          ]
+        }
+      },
     }
   };
 
@@ -41,6 +68,7 @@ class User extends Component {
     for (const key in this.state.formData) {
       dataToSubmit[key] = this.state.formData[key].value
     }
+    console.log(dataToSubmit)
     // axios.post(URL, dataToSubmit)
   }
   render() {
