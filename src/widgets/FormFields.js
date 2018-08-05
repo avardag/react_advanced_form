@@ -26,13 +26,43 @@ const FormFields = (props) => {
   const showLabel = (show, labelText) =>{//Show label or not?
     return show ? <label>{labelText}</label> : null;
   }
-
+  //Input change handler
   const changeHandler =(e, id) =>{ //id is lastname || firstName
     const newState = props.formData; //copy of state
     newState[id].value = e.target.value;
+    // validation
+    let validData = validate(newState[id]) //validate newly changed key in state
+    newState[id].valid = validData[0] // validData is an error array
+    newState[id].validationMsg = validData[1] // validData is an error array
 
     props.change(newState)
   }
+  //Validation function
+  const validate = (inputEl) =>{
+    let error = [true, ''] // index 0->valid, index 1-> validationMsg
+    if (inputEl.validation.required) {
+      const isValid = inputEl.value.trim() !== ''; //equals to true || false
+      const message = `${ !isValid ? 'This field is required' : '' }`
+
+      error = !isValid ? [isValid, message] : error;
+    } else {
+      
+    }
+
+
+    return error
+  }
+
+  const showValidation = (values)=>{
+    let errMsg = null;
+    if (values.validation && !values.valid) {
+      errMsg = (
+        <div className="label_error">{ values.validationMsg }</div>
+      )
+    }
+    return errMsg;
+  }
+
   const renderFormTemplate=(item)=>{ //render form w/ switch statmt on type of input
     let formTemplate = null;
     let values= item.values;
@@ -46,6 +76,7 @@ const FormFields = (props) => {
                 value={values.value}
                 onChange={e => changeHandler(e, item.id)}
                 />
+            {showValidation(values)}
           </div>
         )
         break;
