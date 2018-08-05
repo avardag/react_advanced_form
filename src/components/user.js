@@ -16,7 +16,8 @@ class User extends Component {
           placeholder: "Enter your first name..."
         },
         validation: {
-          required: true
+          required: true,
+          minLen: 3
         },
         valid: false,
         touched: false,
@@ -89,6 +90,7 @@ class User extends Component {
         <form onSubmit={this.submitForm}>
           <FormFields 
                 formData={this.state.formData} //from state
+                onblur={(newState)=> this.updateForm(newState)} //onblur prop
                 change={(newState)=> this.updateForm(newState)}
                 />
           <button>Submit</button>

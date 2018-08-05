@@ -27,28 +27,35 @@ const FormFields = (props) => {
     return show ? <label>{labelText}</label> : null;
   }
   //Input change handler
-  const changeHandler =(e, id) =>{ //id is lastname || firstName
+  const changeHandler =(e, id, blurBool) =>{ //id is lastname || firstName
     const newState = props.formData; //copy of state
     newState[id].value = e.target.value;
     // validation
-    let validData = validate(newState[id]) //validate newly changed key in state
-    newState[id].valid = validData[0] // validData is an error array
-    newState[id].validationMsg = validData[1] // validData is an error array
-
+    if (blurBool) {
+      let validData = validate(newState[id]) //validate newly changed key in state
+      newState[id].valid = validData[0] // validData is an error array
+      newState[id].validationMsg = validData[1] // validData is an error array
+    }
+    newState[id].touched = blurBool;
+    
     props.change(newState)
   }
   //Validation function
   const validate = (inputEl) =>{
     let error = [true, ''] // index 0->valid, index 1-> validationMsg
+
+    if (inputEl.validation.minLen) { //check minimum length of chars validtion
+      const isValid = inputEl.value.length >= inputEl.validation.minLen; //true||false
+      const message = `${ !isValid ? 'Must be grater than ' + inputEl.validation.minLen : '' }`
+      error = !isValid ? [isValid, message] : error;
+    }
+    //check if it is required or not
     if (inputEl.validation.required) {
       const isValid = inputEl.value.trim() !== ''; //equals to true || false
       const message = `${ !isValid ? 'This field is required' : '' }`
 
       error = !isValid ? [isValid, message] : error;
-    } else {
-      
     }
-
 
     return error
   }
@@ -74,7 +81,8 @@ const FormFields = (props) => {
             <input 
                 {...values.config} 
                 value={values.value}
-                onChange={e => changeHandler(e, item.id)}
+                onBlur={e => changeHandler(e, item.id, true)} // boolean is touched key in values parent comp state
+                onChange={e => changeHandler(e, item.id, false)}
                 />
             {showValidation(values)}
           </div>
