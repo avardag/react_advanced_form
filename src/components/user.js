@@ -50,7 +50,11 @@ class User extends Component {
           placeholder: "Enter you message name...",
           rows: 6,
           cols: 36
-        }
+        },
+        validation: {
+          required: false
+        },
+        valid: true,
       },
       age: {
         element: "select",
@@ -65,7 +69,11 @@ class User extends Component {
             {val: '3', text: '28-48 '},
             {val: '4', text: '48-68'},
           ]
-        }
+        },
+        validation: {
+          required: false
+        },
+        valid: true,
       },
     }
   };
@@ -78,11 +86,22 @@ class User extends Component {
   submitForm = (e)=>{
     e.preventDefault();
     let dataToSubmit = {}; //get lastname & forstname from new state
+    let formIsValid = true;
+    //assign keys to DataTOSubmit from state
     for (const key in this.state.formData) {
       dataToSubmit[key] = this.state.formData[key].value
     }
-    console.log(dataToSubmit)
-    // axios.post(URL, dataToSubmit)
+    for (const key in this.state.formData) {
+      if (this.state.formData.hasOwnProperty(key)) {
+        formIsValid = this.state.formData[key].valid && formIsValid;
+        
+      }
+    }
+    
+    if (formIsValid) {
+      console.log(dataToSubmit)
+      // axios.post(URL, dataToSubmit)
+    }
   }
   render() {
     return (
